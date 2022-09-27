@@ -5,7 +5,7 @@ import axios from "axios";
 import { loadModel } from "./loadModel";
 import { AiOutlineSend } from "react-icons/ai"
 import "./room.css"
-const socket = io.connect("http://localhost:8000")
+const socket = io.connect("http://34.130.121.26:80")
 
 class Room extends Component {
     constructor(props) {
@@ -61,9 +61,9 @@ class Room extends Component {
         })
         const node = this.myRef.current;
         loadModel(node);
-        axios.post(`http://localhost:8000/api/load-room${window.location.search}`).then((res)=>{
+        axios.post(`http://34.130.121.26:80/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
             if(res.data.status === 1){
-                window.location.href='/index'
+                window.location.href='#/main'
                 alert("There is no meeting holds in this room");
             }else if(res.data.status === 0){
                 console.log(res);
@@ -76,7 +76,7 @@ class Room extends Component {
                       });
                 })
             }else {
-                window.location.href="/index"
+                window.location.href="#/main"
                 alert("Fail to validate you identity, please rejoin this room");
             }
         })

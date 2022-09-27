@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import { v4 as uuidv4 } from 'uuid';
 
-const socket = io.connect("http://localhost:8000")
+const socket = io.connect("http://34.130.121.26:80")
 
 class Main extends Component {
     constructor(props) {
@@ -41,11 +41,11 @@ class Main extends Component {
         var uuid = uuidv4();
         var title = this.roomTitleInput.current.value.trim();
         var userName = this.createUserNameInput.current.value.trim();
-        axios.post(`http://localhost:8000/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
+        axios.post(`http://34.130.121.26:80/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
             // console.log(res);
             if (userName != "" ) {
                 if (res.data.status === 1){
-                    window.location.href=`/room?code=${n}&uuid=${uuid}`;
+                    window.location.href=`#/room?code=${n}&uuid=${uuid}`;
                 }else{
                     alert("Please try again");
                 }
@@ -56,12 +56,12 @@ class Main extends Component {
         var roomCode = this.roomCodeInput.current.value.trim();
         var userName = this.joinUserNameInput.current.value.trim();
         var uuid = uuidv4();
-        axios.post(`http://localhost:8000/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
+        axios.post(`http://34.130.121.26:80/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
             if (roomCode != "" && userName != "" ) {
                 if(res.data.status === 1){
                     alert("There is no meeting holds in this room");
                 }else{
-                    window.location.href=`/room?code=${roomCode}&uuid=${uuid}`
+                    window.location.href=`#/room?code=${roomCode}&uuid=${uuid}`
                 }
             }
         })
