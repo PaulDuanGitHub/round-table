@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const socket = io.connect("http://localhost:8000")
 
-class Index extends Component {
+class Main extends Component {
     constructor(props) {
         super(props);
         this.state ={
@@ -190,4 +190,4 @@ class Index extends Component {
         )
     }
 }
-export default Index
+export default Main
