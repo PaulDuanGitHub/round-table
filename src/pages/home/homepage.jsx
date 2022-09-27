@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom"
 class Homepage extends Component{
     toIndex = ()=>{
-        window.location.href = "/main"
+        window.location.href = "#/main"
     }
     render(){
         return(
