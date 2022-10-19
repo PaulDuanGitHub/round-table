@@ -1,9 +1,0 @@
-.right-semi{
-    width:500px;
-    height:250px;
-    background-color:rgba(5, 151, 242, 1) !important;
-    border-radius:500px 500px 0 0 !important;
-}
-.right-semi::before {
-    transform:rotate(180deg);
-  }

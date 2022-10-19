@@ -1,0 +1,45 @@
+.create-dialog{
+    display: none;
+    width:240px;
+    margin-left:auto;
+    margin-right:auto;
+    position:absolute;
+    left:0;
+    right:0;
+    z-index:2;
+    background:white;
+    top:125px;
+    padding:25px;
+    padding-top:5px;
+    padding-bottom:10px;
+    border-radius:5px 5px 5px 5px;
+}
+
+.create-enter{
+    opacity: 0;
+    display: block;
+}
+.create-enter-active{
+    display: block;
+    opacity: 1;
+    top: 150px;
+    transition: opacity 200ms linear, top 200ms linear;
+}
+.create-enter-done{
+    display: block;
+    top: 150px;
+}
+.create-exit{
+    display: block;
+    opacity: 1;
+    top: 150px;
+}
+.create-exit-active{
+    display: block;
+    opacity: 0;
+    top: 100px;
+    transition: opacity 200ms linear, top 200ms linear;
+}
+.create-exit-done{
+    display: none;
+}

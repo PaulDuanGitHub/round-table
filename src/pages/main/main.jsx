@@ -1,11 +1,8 @@
-import { Component, createRef} from "react";
+import { Component} from "react";
 import { Button } from "react-bootstrap";
-import axios from "axios";
-import io from 'socket.io-client';
-import {AiOutlineCloseCircle} from "react-icons/ai";
-import { v4 as uuidv4 } from 'uuid';
-
-const socket = io.connect("http://34.130.121.26:80")
+import CreateRoom from "../../components/create/createRoom";
+import JoinRoom from "../../components/join/joinRoom";
+import "./main.css";
 
 class Main extends Component {
     constructor(props) {
@@ -14,17 +11,6 @@ class Main extends Component {
             showJoinDialog: false,
             showCreateDialog: false
         }
-        this.roomCodeInput = createRef();
-        this.joinUserNameInput = createRef();
-        this.createUserNameInput = createRef();
-        this.roomTitleInput = createRef();
-    }
-
-    showJoinDialog = () =>{
-        this.setState({showJoinDialog:true})
-    }
-    hideJoinDialog = () =>{
-        this.setState({showJoinDialog:false})
     }
     showCreateDialog = () =>{
         this.setState({showCreateDialog:true})
@@ -32,103 +18,19 @@ class Main extends Component {
     hideCreateDialog = () =>{
         this.setState({showCreateDialog:false})
     }
-    createRoom = ()=>{
-        function createHash (hashLength) {
-            // 默认长度 24
-            return Array.from(Array(Number(hashLength) || 24), () => Math.floor(Math.random() * 36).toString(36)).join('');
-        }
-        var n = createHash(5);
-        var uuid = uuidv4();
-        var title = this.roomTitleInput.current.value.trim();
-        var userName = this.createUserNameInput.current.value.trim();
-        axios.post(`http://34.130.121.26:80/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
-            // console.log(res);
-            if (userName != "" ) {
-                if (res.data.status === 1){
-                    window.location.href=`#/room?code=${n}&uuid=${uuid}`;
-                }else{
-                    alert("Please try again");
-                }
-            }
-        })
+    showJoinDialog = () =>{
+        this.setState({showJoinDialog:true})
     }
-    joinRoom = () => {
-        var roomCode = this.roomCodeInput.current.value.trim();
-        var userName = this.joinUserNameInput.current.value.trim();
-        var uuid = uuidv4();
-        axios.post(`http://34.130.121.26:80/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
-            if (roomCode != "" && userName != "" ) {
-                if(res.data.status === 1){
-                    alert("There is no meeting holds in this room");
-                }else{
-                    window.location.href=`#/room?code=${roomCode}&uuid=${uuid}`
-                }
-            }
-        })
+    hideJoinDialog = () =>{
+        this.setState({showJoinDialog:false})
     }
     componentDidMount(){
     }
     render(){
         return(
             <div>
-                <div style={{
-                    width:"240px",
-                    marginLeft:"auto",
-                    marginRight:"auto",
-                    position:"absolute",
-                    left:0,
-                    right:0,
-                    zIndex:"2",
-                    background:"white",
-                    top:"150px",
-                    padding:"25px",
-                    paddingTop:"5px",
-                    paddingBottom:"10px",
-                    borderRadius:"5px 5px 5px 5px",
-                    display: this.state.showJoinDialog ? "block" : "none"
-                }}>
-                    <div style={{textAlign:"end"}}>
-                        <AiOutlineCloseCircle style={{fontSize:"25px", cursor:"pointer"}} onClick={this.hideJoinDialog}></AiOutlineCloseCircle>
-                    </div>
-                    <div>
-                        Room Code<input ref={this.roomCodeInput} style={{display:"block"}}></input>
-                    </div>
-                    <div>
-                        Your Name:<input ref={this.joinUserNameInput} style={{display:"block"}}></input>
-                    </div>
-                    <div style={{textAlign:"center", marginTop:"15px"}}>
-                        <Button onClick={this.joinRoom}>Join!</Button>
-                    </div>
-                </div>
-                <div style={{
-                    width:"240px",
-                    marginLeft:"auto",
-                    marginRight:"auto",
-                    position:"absolute",
-                    left:0,
-                    right:0,
-                    zIndex:"2",
-                    background:"white",
-                    top:"150px",
-                    padding:"25px",
-                    paddingTop:"5px",
-                    paddingBottom:"10px",
-                    borderRadius:"5px 5px 5px 5px",
-                    display: this.state.showCreateDialog ? "block" : "none"
-                }}>
-                    <div style={{textAlign:"end"}}>
-                        <AiOutlineCloseCircle style={{fontSize:"25px", cursor:"pointer"}} onClick={this.hideCreateDialog}></AiOutlineCloseCircle>
-                    </div>
-                    <div>
-                        Meeting Title:<input ref={this.roomTitleInput} style={{display:"block"}}></input>
-                    </div>
-                    <div>
-                        Your Name:<input ref={this.createUserNameInput} style={{display:"block"}}></input>
-                    </div>
-                    <div style={{textAlign:"center", marginTop:"15px"}}>
-                        <Button onClick={this.createRoom}>Start!</Button>
-                    </div>
-                </div>
+                <CreateRoom showCreateDialog={this.state.showCreateDialog} closeDialog={this.hideCreateDialog}></CreateRoom>
+                <JoinRoom showJoinDialog={this.state.showJoinDialog} closeDialog={this.hideJoinDialog}></JoinRoom>
                 <div style={{height:"50px", background:"rgb(80,80,80)", marginBottom:"60px"}}></div>
                 <div style={{
                     position:"relative",

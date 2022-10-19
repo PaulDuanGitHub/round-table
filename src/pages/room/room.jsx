@@ -2,10 +2,11 @@ import { Component, createRef } from "react";
 import { Button } from "react-bootstrap";
 import io from 'socket.io-client';
 import axios from "axios";
-import { loadModel } from "./loadModel";
+import { initScene } from "./initScene";
+import { renderScene } from "./renderScene";
 import { AiOutlineSend } from "react-icons/ai"
 import "./room.css"
-const socket = io.connect("http://34.130.121.26:80")
+const socket = io.connect("http://127.0.0.1:8000")
 
 class Room extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class Room extends Component {
             title:"",
             messages:[]
         }
-        this.myRef = createRef();
+        this.canvas = createRef();
         this.textArea = createRef();
         this.msgDiv = createRef();
     }
@@ -45,6 +46,9 @@ class Room extends Component {
             socket.emit('new message',{roomCode:this.state.roomCode,user:this.state.user,msg:this.textArea.current.value})
         }
     }
+    test = ()=>{
+        renderScene(this.canvas.current);
+    }
 
     componentDidMount(){
         socket.on("recieveMessage",(msg)=>{
@@ -59,9 +63,9 @@ class Room extends Component {
             this.textArea.current.focus();
             console.log(msg);
         })
-        const node = this.myRef.current;
-        loadModel(node);
-        axios.post(`http://34.130.121.26:80/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
+        const node = this.canvas.current;
+        initScene(node);
+        axios.post(`http://127.0.0.1:8000/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
             if(res.data.status === 1){
                 window.location.href='#/main'
                 alert("There is no meeting holds in this room");
@@ -105,10 +109,14 @@ class Room extends Component {
         </div>)
         return(
             <div>
+                {/* Title */}
                 <div style={{textAlign:"center",padding:"5px", background:"rgb(80,80,80)", color:"white"}}>{this.state.title}</div>
+                {/* Body */}
                 <div style={{textAlign:"center"}}>
-                <div ref={this.myRef} style={{display:"inline-block", width:"900px", height:"650px"}}>
-
+                {/* Area for 3D */}
+                <div ref={this.canvas} style={{display:"inline-block", width:"900px", height:"650px"}}>
+                <div style={{position:"absolute"}}><Button onClick={this.test}>test</Button></div>
+                {/* Chatting */}
                 </div>
                 <div style={{display:"inline-block", 
                 border:"1px solid rgb(214,214,214)",
