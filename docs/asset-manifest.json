@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.09f2ae12.css",
-    "main.js": "/static/js/main.2d6b917d.js",
-    "static/js/787.9005218e.chunk.js": "/static/js/787.9005218e.chunk.js",
-    "static/media/u.jpg": "/static/media/u.0a119ff5d98b12afa772.jpg",
-    "static/media/room2.glb": "/static/media/room2.23bf102fb66103ee08c2.glb",
-    "static/media/Room1.png": "/static/media/Room1.0df9da1dd7332e07bee4.png",
-    "static/media/Room2.png": "/static/media/Room2.d12c2b918c0945ef8c4d.png",
-    "static/media/homepage_background.svg": "/static/media/homepage_background.93da3611f76f3f6abe553522391fa129.svg",
-    "static/media/water.glb": "/static/media/water.7033cdcc7534a0b946e1.glb",
-    "index.html": "/index.html",
-    "static/media/arrows.svg": "/static/media/arrows.9bd45d06fb17248000b1d55d5dd614ed.svg",
-    "main.09f2ae12.css.map": "/static/css/main.09f2ae12.css.map",
-    "main.2d6b917d.js.map": "/static/js/main.2d6b917d.js.map",
-    "787.9005218e.chunk.js.map": "/static/js/787.9005218e.chunk.js.map"
+    "main.css": "/round-table/static/css/main.09f2ae12.css",
+    "main.js": "/round-table/static/js/main.3080b570.js",
+    "static/js/787.9005218e.chunk.js": "/round-table/static/js/787.9005218e.chunk.js",
+    "static/media/u.jpg": "/round-table/static/media/u.0a119ff5d98b12afa772.jpg",
+    "static/media/room2.glb": "/round-table/static/media/room2.23bf102fb66103ee08c2.glb",
+    "static/media/Room1.png": "/round-table/static/media/Room1.0df9da1dd7332e07bee4.png",
+    "static/media/Room2.png": "/round-table/static/media/Room2.d12c2b918c0945ef8c4d.png",
+    "static/media/homepage_background.svg": "/round-table/static/media/homepage_background.93da3611f76f3f6abe553522391fa129.svg",
+    "static/media/water.glb": "/round-table/static/media/water.7033cdcc7534a0b946e1.glb",
+    "index.html": "/round-table/index.html",
+    "static/media/arrows.svg": "/round-table/static/media/arrows.9bd45d06fb17248000b1d55d5dd614ed.svg",
+    "main.09f2ae12.css.map": "/round-table/static/css/main.09f2ae12.css.map",
+    "main.3080b570.js.map": "/round-table/static/js/main.3080b570.js.map",
+    "787.9005218e.chunk.js.map": "/round-table/static/js/787.9005218e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.09f2ae12.css",
-    "static/js/main.2d6b917d.js"
+    "static/js/main.3080b570.js"
   ]
 }
