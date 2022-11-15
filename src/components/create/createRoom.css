@@ -1,15 +1,15 @@
 .create-dialog{
     display: none;
-    width:240px;
+    width:800px;
     margin-left:auto;
     margin-right:auto;
     position:absolute;
     left:0;
     right:0;
     z-index:2;
-    background:white;
+    background:rgb(245, 245, 245);
     top:125px;
-    padding:25px;
+    padding:15px;
     padding-top:5px;
     padding-bottom:10px;
     border-radius:5px 5px 5px 5px;
@@ -42,4 +42,11 @@
 }
 .create-exit-done{
     display: none;
+}
+
+.room-img{
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+
 }

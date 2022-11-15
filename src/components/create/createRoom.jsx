@@ -1,16 +1,21 @@
 import { Component, createRef} from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Row, Form, Card } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import './createRoom.css'
+import Room1 from '../../img/Room1.png'
+import Room2 from '../../img/Room2.png'
 
 class CreateRoom extends Component{
     constructor(props) {
         super(props);
         this.createUserNameInput = createRef();
         this.roomTitleInput = createRef();
+        this.state = {
+            roomType: 0
+        }
     }
     createRoom = ()=>{
         function createHash (hashLength) {
@@ -21,7 +26,7 @@ class CreateRoom extends Component{
         var uuid = uuidv4();
         var title = this.roomTitleInput.current.value.trim();
         var userName = this.createUserNameInput.current.value.trim();
-        axios.post(`http://127.0.0.1:8000/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
+        axios.post(`https://api.paulduan.tk/round-table/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
             // console.log(res);
             if (userName != "" ) {
                 if (res.data.status === 1){
@@ -31,6 +36,9 @@ class CreateRoom extends Component{
                 }
             }
         })
+    }
+    changeRoomType = (e) => {
+        this.setState({roomType: e.target.value})
     }
     render(){
         return(
@@ -43,13 +51,50 @@ class CreateRoom extends Component{
             >
             <div className={"create-dialog"}>
                 <div style={{textAlign:"end"}}>
-                    <AiOutlineCloseCircle style={{fontSize:"25px", cursor:"pointer"}} onClick={this.props.closeDialog}></AiOutlineCloseCircle>
+                    <AiOutlineCloseCircle style={{fontSize:"20px", cursor:"pointer"}} onClick={this.props.closeDialog}></AiOutlineCloseCircle>
                 </div>
+                <Container>
+                    <Row>
+                        <Col>
+                            Meeting Title: <input ref={this.roomTitleInput} style={{}}></input>
+                        </Col>
+                        <Col>
+                            Your Name: <input ref={this.createUserNameInput} style={{}}></input>
+                        </Col>
+                    </Row>
+                    <Row style={{marginTop:"15px"}}>
+                        <hr></hr>
+                    </Row>
+                    <Row>
+                        <Form.Group style={{display:"flex"}}>
+                            <Form.Check 
+                                type="radio"
+                                value= {0}
+                                label= {<div>
+                                    Deafault Style Room
+                                        <div>
+                                            <img src={Room1} className="room-img"></img>
+                                        </div>
+                                    </div>}
+                                onChange = {this.changeRoomType}
+                                checked = {this.state.roomType == 0}
+                            />
+                            <Form.Check
+                                type="radio"
+                                value= {1}
+                                label= {<div>
+                                    SEELE Style Room
+                                        <div>
+                                            <img src={Room2} className="room-img"></img>
+                                        </div>
+                                    </div>}
+                                onChange = {this.changeRoomType}
+                                checked = {this.state.roomType == 1}
+                            />
+                        </Form.Group>
+                    </Row>
+                </Container>
                 <div>
-                    Meeting Title:<input ref={this.roomTitleInput} style={{display:"block"}}></input>
-                </div>
-                <div>
-                    Your Name:<input ref={this.createUserNameInput} style={{display:"block"}}></input>
                 </div>
                 <div style={{textAlign:"center", marginTop:"15px"}}>
                     <Button onClick={this.createRoom}>Start!</Button>

@@ -60,7 +60,7 @@ export const initScene = (node) => {
         //影子投射范围
         pointLight.shadow.mapSize.width =  500;
         pointLight.shadow.mapSize.height = 500;
-        scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
+        // scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
     })
 
     var directionalLight = new THREE.DirectionalLight( 0xFFC674,0.9 ); //平行光

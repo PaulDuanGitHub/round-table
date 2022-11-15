@@ -16,7 +16,7 @@ class JoinRoom extends Component{
         var roomCode = this.roomCodeInput.current.value.trim();
         var userName = this.joinUserNameInput.current.value.trim();
         var uuid = uuidv4();
-        axios.post(`http://127.0.0.1:8000/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
+        axios.post(`https://api.paulduan.tk/round-table/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
             if (roomCode != "" && userName != "" ) {
                 if(res.data.status === 1){
                     alert("There is no meeting holds in this room");

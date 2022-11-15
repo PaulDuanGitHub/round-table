@@ -6,7 +6,8 @@ import { initScene } from "./initScene";
 import { renderScene } from "./renderScene";
 import { AiOutlineSend } from "react-icons/ai"
 import "./room.css"
-const socket = io.connect("http://127.0.0.1:8000")
+// const socket = io.connect("https://api.paulduan.tk/")
+const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
 
 class Room extends Component {
     constructor(props) {
@@ -65,7 +66,7 @@ class Room extends Component {
         })
         const node = this.canvas.current;
         initScene(node);
-        axios.post(`http://127.0.0.1:8000/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
+        axios.post(`https://api.paulduan.tk/round-table/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
             if(res.data.status === 1){
                 window.location.href='#/main'
                 alert("There is no meeting holds in this room");
