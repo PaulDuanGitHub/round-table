@@ -1,14 +1,23 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import GLT from '../../mod/room2.glb'
+import Room1GLT from '../../mod/room.glb'
+// import Room1GLT from '../../mod/room.fbx'
+// import Room1GLT from '../../mod/Room.glb'
+import Room2GLT from '../../mod/room2.glb'
 import Universe from "../../img/u.jpg"
 //Note: In Three.js 坐标系是(x,y,z) y为竖着的轴 右手坐标系
-export const loader = new GLTFLoader(); //GLTFLoader 加载器
-export const scene = new THREE.Scene(); //场景
-export const renderer = new THREE.WebGLRenderer(); //渲染器
 
-export const initScene = (node) => {
+export const initScene = (node, roomType) => {
+    const renderer = new THREE.WebGLRenderer(); //渲染器
+    //设置色彩sRGB，因为Blender的颜色是sRGB
+    THREE.ColorManagement.legacyMode = false
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.physicallyCorrectLights = true;
+    const scene = new THREE.Scene(); //场景
+    const loader = new GLTFLoader(); //GLTFLoader 加载器
+    const fbxLoader = new FBXLoader(); //GLTFLoader 加载器
     //一个Perspective相机，锥体aspect是dom元素的宽高比 
     const camera = new THREE.PerspectiveCamera( 30, node.offsetWidth / node.offsetHeight, 0.1,500 ); 
     // {
@@ -36,35 +45,11 @@ export const initScene = (node) => {
     
     node.appendChild( renderer.domElement ); //关联dom
     
-    var ambientLight = new THREE.AmbientLight( 0xffffff, 0.1 ); //环境光
-    // scene.add( ambientLight );
-    
-    var pointLightHe = 10;
-    var pointLightCo = 0xffffff;
-    var pointLightIn = 1;
+    var ambientLight = new THREE.AmbientLight( 0xffffff, 0.2); //环境光
+    scene.add( ambientLight );
 
-    var pointLight1 = new THREE.PointLight(pointLightCo,pointLightIn)
-    pointLight1.position.set(0,pointLightHe,20)
-    scene.add(pointLight1)
-    var pointLights = [pointLight1]
-
-    pointLights.map((pointLight)=>{
-        // scene.add(new THREE.PointLightHelper(pointLight, 10))
-        pointLight.castShadow = true;
-        pointLight.shadow.camera.fov = 90;
-        pointLight.shadow.camera.aspect = 1;
-        // pointLight.shadow.camera.near = 0.1;
-        pointLight.shadow.camera.far = 500;
-        pointLight.shadow.bias = -0.001;
-        // pointLight.shadow.normalBias = -0.002;
-        //影子投射范围
-        pointLight.shadow.mapSize.width =  500;
-        pointLight.shadow.mapSize.height = 500;
-        // scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
-    })
-
-    var directionalLight = new THREE.DirectionalLight( 0xFFC674,0.9 ); //平行光
-    directionalLight.position.set( 0, 100, -300 ); //平行光位置
+    var directionalLight = new THREE.DirectionalLight( 0xFFFFFF,1 ); //平行光
+    directionalLight.position.set( 1, 5, -1 ); //平行光位置
     directionalLight.castShadow = true; //可否投射影子
     // scene.add( directionalLight ); //加到场景里
     //设置平行光影子镜头的大小left right为上截面大小，top bottom为下截面大小
@@ -117,8 +102,23 @@ export const initScene = (node) => {
     )
     //Animation
     var mixer;
+    var GLT; 
+    console.log(roomType);
+    switch (roomType) {
+        case 0:
+            GLT = Room1GLT;
+            break;
+        case 1:
+            GLT = Room2GLT;
+            break;
+            default:
+                GLT = Room1GLT;
+                break;
+            }
     //加载GLT模型
     loader.load( GLT, ( gltf ) => {
+        console.log(gltf);
+
         // gltf.scene.scale.set(20,20,20);
         gltf.scene.scale.set(1,1,1);
         gltf.scene.position.set(0,0,0);
@@ -126,19 +126,42 @@ export const initScene = (node) => {
         //遍历模型设置阴影
         gltf.scene.receiveShadow = true;
         gltf.scene.castShadow = true;
-        gltf.scene.traverse( function ( node ) {
-            if (node.isMesh){
-                node.receiveShadow = true;
-                node.castShadow = true;
+        gltf.scene.children.forEach((node)=>{
+            node.receiveShadow = true;
+            node.castShadow = true;
+            if (node.type=="PointLight"){
+                if(node.name != "Light001"){
+                    node.intensity=50;
+                    node.castShadow = false;
+                    // node.receiveShadow = true;
+
+                }else{
+                }
+                node.intensity=50;
+                // node.shadow.camera.fov = 90;
+                // node.shadow.camera.aspect = 1;
+                // pointLight.shadow.camera.near = 0.1;
+                // node.shadow.camera.far = 500;
+                node.shadow.bias = -0.001;
+                node.shadow.normalBias = -0.002;
+                //影子投射范围
+                // node.shadow.mapSize.width =  500;
+                // node.shadow.mapSize.height = 500;
             }
-        } );
+        })
+
         mixer = new THREE.AnimationMixer(gltf.scene);
         gltf.animations.forEach((clip) => {
-            mixer.clipAction(clip).play();
+            var animation = mixer.clipAction(clip);
+            animation.setLoop(THREE.LoopOnce);
+            animation.clampWhenFinished = true;
+            // raiseHand(animation);
+            // animation.timeScale = -1;
+            // animation.play();
         });
     
+
         scene.add( gltf.scene );
-        console.log(gltf);
         // controls.update();
         // render();
         // animate();
@@ -146,6 +169,65 @@ export const initScene = (node) => {
     }, undefined, function ( error ) {
     console.error( error );
     } );
+
+
+
+    // fbxLoader.load( GLT, ( gltf ) => {
+    //     console.log(gltf);
+
+    //     // gltf.scene.scale.set(20,20,20);
+    //     gltf.scale.set(0.1,0.1,0.1);
+    //     gltf.position.set(0,0,0);
+        
+    //     //遍历模型设置阴影
+    //     gltf.receiveShadow = true;
+    //     gltf.castShadow = true;
+    //     gltf.children.forEach((node)=>{
+    //         node.receiveShadow = true;
+    //         node.castShadow = true;
+    //         if(node.name=="metarig"){
+    //             node.children.forEach((bone)=>{
+    //                 if(bone.name=="spine"){
+    //                     bone.rotateX+=2;
+    //                     console.log(bone);
+    //                 }
+    //             })
+    //         }
+    //         if (node.type=="PointLight"){
+    //             if(node.name != "Light001"){
+    //                 node.intensity=50;
+    //                 node.castShadow = false;
+    //                 // node.receiveShadow = true;
+
+    //             }else{
+    //             }
+    //             node.intensity=50;
+    //             // node.shadow.camera.fov = 90;
+    //             // node.shadow.camera.aspect = 1;
+    //             // pointLight.shadow.camera.near = 0.1;
+    //             // node.shadow.camera.far = 500;
+    //             node.shadow.bias = -0.001;
+    //             node.shadow.normalBias = -0.002;
+    //             //影子投射范围
+    //             // node.shadow.mapSize.width =  500;
+    //             // node.shadow.mapSize.height = 500;
+    //         }
+    //     })
+
+    //     mixer = new THREE.AnimationMixer(gltf);
+    //     gltf.animations.forEach((clip) => {
+    //         mixer.clipAction(clip).play();
+    //     });
+    
+
+    //     scene.add( gltf );
+    //     // controls.update();
+    //     // render();
+    //     // animate();
+
+    // }, undefined, function ( error ) {
+    // console.error( error );
+    // } );
 
 
     var clock = new THREE.Clock();
@@ -163,4 +245,8 @@ export const initScene = (node) => {
         renderer.render(scene, camera)
     }
     animate();
+}
+
+export function raiseHand(animation){
+    animation.play();
 }

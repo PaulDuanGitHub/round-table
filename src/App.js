@@ -1,6 +1,6 @@
-import Homepage from "./pages/home/homepage";
-import Main from "./pages/main/main";
-import Room from "./pages/room/room.jsx";
+import HomePage from "./pages/home/HomePage.jsx";
+import MainPage from "./pages/main/MainPage.jsx";
+import RoomPage from "./pages/room/RoomPage.jsx";
 import { HashRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -8,9 +8,9 @@ function App() {
       <div>
         <HashRouter>
           <Routes>
-              <Route path='/main' element={<Main/>}/>
-              <Route path='*' element={<Homepage/>}/>
-              <Route path='/room' element={<Room/>}/>
+              <Route path='/main' element={<MainPage/>}/>
+              <Route path='*' element={<HomePage/>}/>
+              <Route path='/room' element={<RoomPage/>}/>
           </Routes>
         </HashRouter>
       </div>

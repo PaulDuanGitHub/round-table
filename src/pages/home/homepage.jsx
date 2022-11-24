@@ -3,7 +3,7 @@ import table_img from "../../img/homepage_background.svg";
 import arrows from "../../img/arrows.svg"
 import { Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom"
-class Homepage extends Component{
+class HomePage extends Component{
     toIndex = ()=>{
         window.location.href = "#/main"
     }
@@ -34,4 +34,4 @@ class Homepage extends Component{
     }
 }
 
-export default Homepage
+export default HomePage

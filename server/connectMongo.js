@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
+// const mongoose = require('mongoose');
 
 mongoose.connect("mongodb://127.0.0.1:25565/roundtable");
 
