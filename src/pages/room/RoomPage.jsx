@@ -7,8 +7,9 @@ import { Room } from "./Room.js";
 // import { renderScene } from "./renderScene.js";
 import { AiOutlineSend } from "react-icons/ai"
 import "./RoomPage.css"
+import url from "../../Api.js";
 // const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
-const socket = io.connect("http://127.0.0.1:8000/")
+const socket = io.connect(url)
 
 class RoomPage extends Component {
     constructor(props) {
@@ -82,7 +83,7 @@ class RoomPage extends Component {
             alert("You have been logged from another location");
         })
         // axios.post(`https://api.paulduan.tk/round-table/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
-            axios.post(`http://127.0.0.1:8000/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
+            axios.post(`${url}/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
                 if(res.data.status === 1){
                     window.location.href='#/main'
                     alert("There is no meeting holds in this room");
