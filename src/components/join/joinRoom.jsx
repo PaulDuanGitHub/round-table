@@ -3,6 +3,7 @@ import { Button,Row, Form } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import url from "../../Api";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import './JoinRoom.css'
 
@@ -19,7 +20,7 @@ class JoinRoom extends Component {
     }
     checkRoom = () => {
         var roomCode = this.roomCodeInput.current.value.trim();
-        axios.post(`http://127.0.0.1:8000/api/check-room?code=${roomCode}`).then((res) => {
+        axios.post(`${url}/api/check-room?code=${roomCode}`).then((res) => {
             if (res.data.status == 1) {
                 alert("There is no meeting holds in this room");
             } else {
@@ -47,7 +48,7 @@ class JoinRoom extends Component {
         var chosenSeat = this.state.chosenSeat;
         var uuid = uuidv4();
         if (roomCode != "" && userName != "" && chosenSeat != null) {
-            axios.post(`http://127.0.0.1:8000/api/join-room?code=${roomCode}&name=${userName}&uuid=${uuid}&chosenSeat=${chosenSeat-1}`).then((res) => {
+            axios.post(`${url}/api/join-room?code=${roomCode}&name=${userName}&uuid=${uuid}&chosenSeat=${chosenSeat-1}`).then((res) => {
             // axios.post(`https://api.paulduan.tk/round-table/api/check-room?code=${roomCode}&name=${userName}&uuid=${uuid}`).then((res)=>{
                 if (res.data.status == 1) {
                     alert("There is no meeting holds in this room");

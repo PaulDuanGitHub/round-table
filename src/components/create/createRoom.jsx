@@ -5,6 +5,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import './CreateRoom.css'
+import url from "../../Api";
 import Room1 from '../../img/Room1.png'
 import Room2 from '../../img/Room2.png'
 
@@ -28,7 +29,7 @@ class CreateRoom extends Component{
         var userName = this.createUserNameInput.current.value.trim();
         var roomType = this.state.roomType;
         // axios.post(`https://api.paulduan.tk/round-table/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}`).then((res)=>{
-        axios.post(`http://127.0.0.1:8000/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}&roomType=${roomType}`).then((res)=>{
+        axios.post(`${url}/api/create-room?code=${n}&name=${userName}&uuid=${uuid}&title=${title}&roomType=${roomType}`).then((res)=>{
             // console.log(res);
             if (userName != "" ) {
                 if (res.data.status === 1){
