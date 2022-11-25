@@ -8,8 +8,8 @@ import { Room } from "./Room.js";
 import { AiOutlineSend } from "react-icons/ai"
 import "./RoomPage.css"
 import url from "../../Api.js";
-// const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
-const socket = io.connect(url)
+const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
+// const socket = io.connect("http://127.0.0.1:8000/")
 
 class RoomPage extends Component {
     constructor(props) {

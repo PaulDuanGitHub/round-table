@@ -20,7 +20,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import mcFont from './Minecraft_Regular.json'
+import mcFont from '../../fonts/Minecraft_Regular.json'
 import fontPath from 'three/examples/fonts/helvetiker_bold.typeface.json'
 import Room1GLT from '../../mod/room.glb'
 // import Room1GLT from '../../mod/room.fbx'
