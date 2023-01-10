@@ -82,7 +82,7 @@ class CreateRoom extends Component{
                                 onChange = {this.changeRoomType}
                                 checked = {this.state.roomType == 0}
                             />
-                            <Form.Check
+                            {/* <Form.Check
                                 type="radio"
                                 value= {1}
                                 label= {<div>
@@ -93,7 +93,7 @@ class CreateRoom extends Component{
                                     </div>}
                                 onChange = {this.changeRoomType}
                                 checked = {this.state.roomType == 1}
-                            />
+                            /> */}
                         </Form.Group>
                     </Row>
                 </Container>

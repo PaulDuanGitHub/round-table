@@ -18,4 +18,4 @@ Please change all address and ports before you run it.
   - TTS from messages.
 
 ## Screenshot
-![](https://i.ibb.co/G0JLdZC/readme.png)
+![](https://i.ibb.co/zGKDs0c/untitled.png)

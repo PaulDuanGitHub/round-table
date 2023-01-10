@@ -8,8 +8,8 @@ import { Room } from "./Room.js";
 import { AiOutlineSend } from "react-icons/ai"
 import "./RoomPage.css"
 import url from "../../Api.js";
-const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
-// const socket = io.connect("http://127.0.0.1:8000/")
+// const socket = io.connect("https://api.paulduan.tk/", {path :'/round-table/socket.io'})
+const socket = io.connect("http://127.0.0.1:8000/")
 
 class RoomPage extends Component {
     constructor(props) {
@@ -36,17 +36,20 @@ class RoomPage extends Component {
         this.setState({user:event.target.value});
     }
     sendMessage = (event)=>{
-        if (event.type === 'keydown' && event.key === "Enter") {
+        if (event.key == "Enter") {
+            console.log(event);
             event.preventDefault();
-            if (this.textArea.current.value===""){
+            if (this.textArea.current.value==""){
                 return
             }
             socket.emit('new message',{roomCode:this.state.roomCode,user:this.state.user,msg:this.textArea.current.value})
-        }else if(event.type==="click"){
-            if (this.textArea.current.value===""){
+            this.textArea.current.value = "";
+        }else if(event.type=="click"){
+            if (this.textArea.current.value==""){
                 return
             }
             socket.emit('new message',{roomCode:this.state.roomCode,user:this.state.user,msg:this.textArea.current.value})
+            this.textArea.current.value = "";
         }
     }
     raisingHand = ()=>{
@@ -67,6 +70,7 @@ class RoomPage extends Component {
 
     componentDidMount(){
         socket.on("recieveMessage",(msg)=>{
+            // console.log("new message");
             this.setState({messages:this.state.messages.concat(msg)},()=>{
                 this.msgDiv.current.scrollTo({
                     top: this.msgDiv.current.scrollHeight,
@@ -74,8 +78,8 @@ class RoomPage extends Component {
                     behavior: 'smooth'
                   });
             })
-            this.textArea.current.value = "";
-            this.textArea.current.focus();
+            // this.textArea.current.value = "";
+            // this.textArea.current.focus();
             console.log(msg);
         })
         socket.on("quitRoom",()=>{
@@ -84,10 +88,10 @@ class RoomPage extends Component {
         })
         // axios.post(`https://api.paulduan.tk/round-table/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
             axios.post(`${url}/api/load-room${window.location.hash.substring(6)}`).then((res)=>{
-                if(res.data.status === 1){
+                if(res.data.status == 1){
                     window.location.href='#/main'
                     alert("There is no meeting holds in this room");
-                }else if(res.data.status === 0){
+                }else if(res.data.status == 0){
                     console.log(res);
                     this.setState({roomCode:res.data.code, messages:res.data.msgs, user:res.data.user, title:res.data.title, roomType:res.data.roomType},()=>{
                         const node = this.canvas.current;
@@ -114,7 +118,7 @@ class RoomPage extends Component {
         // console.log(this.state);
         const messages = this.state.messages.map((msg)=>
         <div>
-            <div style={{textAlign:(msg.user.uuid === this.state.user.uuid ? "end" : "start"), fontSize:"13px"}}>
+            <div style={{textAlign:(msg.user.uuid == this.state.user.uuid ? "end" : "start"), fontSize:"13px"}}>
                 {msg.user.userName}
             </div>
             <div style={{
@@ -123,7 +127,7 @@ class RoomPage extends Component {
                 marginBottom:"10px",
                 border:"1px solid none", 
                 width:"fit-content", 
-                marginLeft:(msg.user.uuid === this.state.user.uuid ? "auto" : "none"),
+                marginLeft:(msg.user.uuid == this.state.user.uuid ? "auto" : "none"),
                 borderRadius:"5px 5px 5px 5px",
                 background:"#6BC4FF",
                 // background:"rgb(255,255,255)",
@@ -140,7 +144,7 @@ class RoomPage extends Component {
                 <div style={{textAlign:"center"}}>
                 <div style={{position:"absolute"}}><Button onClick={this.raisingHand}>Raising</Button></div>
                 <div style={{position:"absolute",left:"80px"}}><Button onClick={this.loweringHand}>Lowering</Button></div>
-                <div style={{position:"absolute",left:"200px"}}><Button onClick={this.clap}>Calp</Button></div>
+                <div style={{position:"absolute",left:"200px"}}><Button onClick={this.clap}>Clap</Button></div>
                 {/* Area for 3D */}
                 <div ref={this.canvas} style={{display:"inline-block", width:"900px", height:"650px"}}>
                 {/* Chatting */}

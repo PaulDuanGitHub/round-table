@@ -15,6 +15,7 @@
 /build
 
 # misc
+/src/mod/room.glb
 .DS_Store
 .env.local
 .env.development.local
