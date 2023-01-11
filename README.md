@@ -17,3 +17,6 @@ Please change all address and ports before you run it.
 ### 3D representation
 - Will be able to present the room and people in 3D use [**Three.js**](https://threejs.org/).
 - Be able to perform basic gestures like rasing hand and clap.
+
+### Screenshot
+<img align="center" src = "./src/img/Screenshot2.png"><img>
