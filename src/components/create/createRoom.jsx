@@ -5,7 +5,8 @@ import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import './CreateRoom.css'
-import url from "../../Api";
+import {url} from "../../Api";
+import { withRouter } from "../withRouter.js"
 import Room1 from '../../img/Room1.png'
 import Room2 from '../../img/Room2.png'
 
@@ -33,7 +34,8 @@ class CreateRoom extends Component{
             // console.log(res);
             if (userName != "" ) {
                 if (res.data.status === 1){
-                    window.location.href=`#/room?code=${n}&uuid=${uuid}`;
+                    // window.location.href=`#/room?code=${n}&uuid=${uuid}`;
+                    this.props.router.navigate(`/room?code=${n}&uuid=${uuid}`);
                 }else{
                     alert("Please try again");
                 }
@@ -108,4 +110,4 @@ class CreateRoom extends Component{
         )
     }
 }
-export default CreateRoom
+export default withRouter(CreateRoom)

@@ -122,34 +122,44 @@ io.on('connection', (socket) => {
 		// var userUUID = data.user.uuid;
 		// RoomModel.updateOne({code:roomCode}, {$pull: { users: { userName: userName, uuid: userUUID } }}, (err) =>{})
 		console.log("我走了啊，我不打扰");
+		// console.log(`${data.user.name} leave the room ${data.roomCode}`);
 	})
 	socket.on("joinRoom", (data) => {
 		io.in(data.roomCode).fetchSockets().then((sockets)=>{
-			console.log(sockets.length);
 			sockets.forEach(s=>{
 				if (s.uuid == data.uuid){
 					// io.to(s.id).emit("quitRoom");
+					return;
 				};
 			})
 		});
 		
 		socket.join(data.roomCode)
+		console.log(`put ${data.uuid} into ${data.roomCode}, now we have:`);
+		io.in(data.roomCode).fetchSockets().then((sockets)=>{
+			sockets.forEach(s=>{
+				console.log(s.id);
+				if (s.uuid == data.uuid){
+					return;
+				};
+			})
+		});
 		socket.uuid = data.uuid;
-
+		
 		RoomModel.findOne({ code: data.roomCode }, { users: 1 }, (err, doc) => {
 			if (doc != null) {
 				io.to(data.roomCode).emit("resUsers", doc.users)
 			}
 		})
-
+		
 		io.to(data.roomCode).emit("loadingRoom", data.node)
 		
-		console.log(`${socket.id } joined room ${data.roomCode}`);
+		console.log(`${data.uuid} joined the room ${data.roomCode}`);
 
 	})
 	socket.on("setMyMixerTime", (data) => {
 		var roomCode = data.roomCode;
-		console.log("收到" + roomCode + " " + data.selfAnimationActionTimes);
+		// console.log("收到" + roomCode + " " + data.selfAnimationActionTimes);
 		socket.to(roomCode).emit("setUrMixerTime", {hisTimes: data.selfAnimationActionTimes, hisIndex: data.selfIndex})
 	})
 	socket.on("new message", (data) => {
@@ -157,11 +167,20 @@ io.on('connection', (socket) => {
 		var roomCode = data.roomCode
 		var msg = data.msg
 		var user = data.user
-		res.ip = socket.handshake.address
+		res.ip = ""
 		res.time = socket.handshake.time;
 		// console.log(JSON.stringify(res));
 		// io.sockets.emit("recieveMessage",res);
+		io.in(data.roomCode).fetchSockets().then((sockets)=>{
+			sockets.forEach(s=>{
+				console.log(`Send to the following clients: ${s.uuid}`);
+				if (s.uuid == data.uuid){
+					return;
+				};
+			})
+		});
 		io.to(roomCode).emit("recieveMessage", res)
+		console.log(`${user.userName} saies: ${msg}` )
 		// console.log(roomCode);
 		RoomModel.updateOne({ code: roomCode }, { $push: { messages: { ip: res.ip, msg: msg, time: res.time, user: user } } }, (err) => {
 			// console.log(err);

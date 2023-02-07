@@ -5,7 +5,9 @@ import { Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom"
 class HomePage extends Component{
     toIndex = ()=>{
-        window.location.href = "#/main"
+        // window.location.href = "#/main"
+        this.props.router.navigate(`/main`);
+
     }
     render(){
         return(
@@ -22,7 +24,9 @@ class HomePage extends Component{
                 {/* 链接按钮 */}
                 <div style={{textAlign:"end"}}>
                     <div style={{position:"relative", top:"150px",right:"10px"}}>
-                    <img alt="" src={arrows} style={{scale:"0.8", cursor:"pointer"}} draggable={false} onClick={this.toIndex}></img>
+                    <NavLink to="/main">
+                        <img alt="" src={arrows} style={{scale:"0.8", cursor:"pointer"}} draggable={false}></img>
+                    </NavLink>
                     <div style={{position:"relative",right:"10px", fontSize:"25px", color:"white"}}>Try It Now</div>
                     </div>
                 </div>

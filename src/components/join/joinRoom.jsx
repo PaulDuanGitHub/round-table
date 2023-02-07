@@ -3,8 +3,9 @@ import { Button,Row, Form } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
-import url from "../../Api";
+import {url} from "../../Api";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { withRouter } from "../withRouter";
 import './JoinRoom.css'
 
 class JoinRoom extends Component {
@@ -53,7 +54,8 @@ class JoinRoom extends Component {
                 if (res.data.status == 1) {
                     alert("There is no meeting holds in this room");
                 } else {
-                    window.location.href = `#/room?code=${roomCode}&uuid=${uuid}`
+                    // window.location.href = `#/room?code=${roomCode}&uuid=${uuid}`
+                    this.props.router.navigate(`/room?code=${roomCode}&uuid=${uuid}`);
                 }
             })
         }else{
@@ -159,4 +161,4 @@ class JoinRoom extends Component {
         )
     }
 }
-export default JoinRoom
+export default withRouter(JoinRoom)

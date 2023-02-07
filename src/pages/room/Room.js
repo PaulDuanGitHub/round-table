@@ -52,32 +52,32 @@ export class Room {
         // If I do, I have to put the new connection into
         // the same room.
         this.socket = socket;
-        this.socket.on("setUrMixerTime",(data)=>{
+        this.socket.on("setUrMixerTime", (data) => {
             // console.log("收到 " + data.hisTimes[0].time + " " + data.hisTimes[1].time);
-            for(var i = 0; i < 2; i ++){
+            for (var i = 0; i < 2; i++) {
                 // console.log(this.animationActions);
-                if(data.hisTimes[i].time > 0){
-                    this.animationActions[data.hisIndex*2+i].play()
-                    this.animationActions[data.hisIndex*2+i].paused = true
-                }else if(data.hisTimes[i].time == 0){
+                if (data.hisTimes[i].time > 0) {
+                    this.animationActions[data.hisIndex * 2 + i].play()
+                    this.animationActions[data.hisIndex * 2 + i].paused = true
+                } else if (data.hisTimes[i].time == 0) {
                     // console.log("test")
-                    this.animationActions[data.hisIndex*2+i].stop()
-                    this.animationActions[data.hisIndex*2+i].paused = false
+                    this.animationActions[data.hisIndex * 2 + i].stop()
+                    this.animationActions[data.hisIndex * 2 + i].paused = false
                 }
-                this.animationActions[data.hisIndex*2+i].time = data.hisTimes[i].time
+                this.animationActions[data.hisIndex * 2 + i].time = data.hisTimes[i].time
             }
         });
-        this.socket.on("resUsers",(data)=>{
+        this.socket.on("resUsers", (data) => {
             // console.log("收到 " + data);
             // console.log("旧名单：" + this.confereeList);
-            data.forEach((user)=>{
+            data.forEach((user) => {
                 this.newConfereeList[user.chosenSeat] = user.userName
             })
             // console.log("新名单：" + this.newConfereeList);
             // console.log("旧名单：" + this.confereeList);
         });
         this.confereeList = new Array(8).fill(""); // Can be sub by room size in the future
-        users.forEach((user)=>{
+        users.forEach((user) => {
             this.confereeList[user.chosenSeat] = user.userName
         })
         // console.log(this.confereeList);
@@ -112,9 +112,9 @@ export class Room {
         node.appendChild(this.renderer.domElement); //关联dom
 
         this.ambientLight = new THREE.AmbientLight(0xffffff, 0); //环境光
-        this.scene.add( this.ambientLight );
-    }
+        this.scene.add(this.ambientLight);
 
+    }
     loadModel(roomType) {
 
         const textureLoader = new THREE.TextureLoader()
@@ -122,7 +122,7 @@ export class Room {
             (texture) => {
                 texture.mapping = THREE.EquirectangularReflectionMapping; //等距柱状投影图
                 const crt = new THREE.WebGLCubeRenderTarget(texture.image.height)
-                crt.fromEquirectangularTexture(this.renderer,texture)
+                crt.fromEquirectangularTexture(this.renderer, texture)
                 // this.scene.background = texture
                 this.scene.environment = texture
             }
@@ -147,22 +147,22 @@ export class Room {
             // gltf.scene.scale.set(20,20,20);
             gltf.scene.scale.set(1, 1, 1);
             gltf.scene.position.set(0, 0, 0);
-            
+
             //遍历模型设置阴影
             gltf.scene.receiveShadow = true;
             gltf.scene.castShadow = true;
             // gltf.scene.getObjectByName("球体.008").visible = false;
             gltf.scene.traverse((node) => {
-                if(node.name.includes("rig00")){
+                if (node.name.includes("rig00")) {
                     this.conferees.push(node);
                     var i = node.name.substring(node.name.length - 1)
-                    i = parseInt(i-1);
+                    i = parseInt(i - 1);
                     node.visible = false;
-                    if(this.confereeList[i] != ""){
+                    if (this.confereeList[i] != "") {
                         node.visible = true
                         var nameTag = this.create3DNameTag(this.confereeList[i]);
                         // console.log(gltf.scene.getObjectByName("球体00"+i));
-                        nameTag.position.set(node.position.x,node.position.y,node.position.z);
+                        nameTag.position.set(node.position.x, node.position.y, node.position.z);
                         // nameTag.position.setY(node.position.y+1.5);
                         nameTag.position.setY(2.4);
                         this.nameTags.push(nameTag);
@@ -217,14 +217,14 @@ export class Room {
             //         node.shadow.normalBias = -0.002;
             //     }
             // })
-            
+
             this.mixer = new THREE.AnimationMixer(gltf.scene);
             // this.animations = gltf.animations;
             this.animationActions = [];
             gltf.animations.forEach((clip) => {
                 var animation = this.mixer.clipAction(clip);
                 // console.log(clip.name);
-                if(clip.name.includes("rig.00" + (this.selfIndex+1))){
+                if (clip.name.includes("rig.00" + (this.selfIndex + 1))) {
                     this.selfAnimationActions.push(animation);
                 }
                 this.animationActions.push(animation);
@@ -235,7 +235,7 @@ export class Room {
                 // animation.play();
             });
             this.scene.add(gltf.scene);
-            this.nameTags.forEach((nameTag)=>{
+            this.nameTags.forEach((nameTag) => {
                 this.scene.add(nameTag);
             })
             console.log(this);
@@ -249,7 +249,7 @@ export class Room {
     animate = () => {
         // Here need a callback function, instead of a
         // function's return value.
-        requestAnimationFrame(this.animate);
+        this.animationFrameID = requestAnimationFrame(this.animate);
         this.update();
         this.render();
     };
@@ -257,11 +257,11 @@ export class Room {
         this.renderer.render(this.scene, this.camera)
     }
 
-    update(){
+    update() {
         // Update control
         this.controls.update();
         // Update name tags' rotation
-        this.nameTags.forEach((nameTag)=>{
+        this.nameTags.forEach((nameTag) => {
             nameTag.rotation.x = this.camera.rotation.x;
             nameTag.rotation.y = this.camera.rotation.y;
             nameTag.rotation.z = this.camera.rotation.z;
@@ -280,28 +280,28 @@ export class Room {
          */
         if (this.mixer) {
             this.mixer.update(delta)
-            if(this.selfAnimationActions[0].time >= 0 ||this.selfAnimationActions[1].time >= 0){// So that when the others update, it will not emit messages.
+            if (this.selfAnimationActions[0].time >= 0 || this.selfAnimationActions[1].time >= 0) {// So that when the others update, it will not emit messages.
                 var selfAnimationActionTimes = [];
-                this.selfAnimationActions.forEach((selfAnimationAction)=>{
-                    selfAnimationActionTimes.push({time:selfAnimationAction.time})
+                this.selfAnimationActions.forEach((selfAnimationAction) => {
+                    selfAnimationActionTimes.push({ time: selfAnimationAction.time })
                     // selfAnimationActionTimes.push(selfAnimationAction.paused)
                 })
                 // console.log("发送：" + this.selfAnimationActions[0].time + " " + this.selfAnimationActions[1].time);
-                this.socket.emit("setMyMixerTime", {roomCode: this.roomCode, selfAnimationActionTimes: selfAnimationActionTimes, selfIndex: this.selfIndex});
-            } 
+                this.socket.emit("setMyMixerTime", { roomCode: this.roomCode, selfAnimationActionTimes: selfAnimationActionTimes, selfIndex: this.selfIndex });
+            }
         }
     }
 
-    updateConferees(){
+    updateConferees() {
         this.conferees.forEach(conferee => {
             var i = conferee.name.substring(conferee.name.length - 1)
-            i = parseInt(i-1);
+            i = parseInt(i - 1);
             // console.log("更新 旧名单:" + this.confereeList );
             // console.log("更新 新名单:" + this.newConfereeList );
-            if(this.confereeList[i] != this.newConfereeList[i]){
+            if (this.confereeList[i] != this.newConfereeList[i]) {
                 conferee.visible = true
                 var nameTag = this.create3DNameTag(this.newConfereeList[i]);
-                nameTag.position.set(conferee.position.x,conferee.position.y,conferee.position.z);
+                nameTag.position.set(conferee.position.x, conferee.position.y, conferee.position.z);
                 nameTag.position.setY(2.4);
                 this.nameTags.push(nameTag);
                 this.scene.add(nameTag);
@@ -310,12 +310,12 @@ export class Room {
         this.confereeList = this.newConfereeList.slice();
     }
 
-    create3DNameTag(name){
+    create3DNameTag(name) {
         var geometry;
         // var name = name;
         const font = this.fontLoader.parse(mcFont);
         // console.log(name);
-        geometry = new TextGeometry( name, {
+        geometry = new TextGeometry(name, {
             font,
             size: 0.15,
             height: 0,
@@ -326,12 +326,12 @@ export class Room {
             // bevelSegments: 5
         });
         // console.log(geometry);
-        var nameMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent : false }))
+        var nameMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: false }))
         nameMesh.geometry.center();
         var bgWidth = nameMesh.geometry.boundingBox.getSize(new THREE.Vector3()).x;
         var bgHeight = nameMesh.geometry.boundingBox.getSize(new THREE.Vector3()).y;
-        var background = new THREE.Mesh(new THREE.PlaneGeometry(bgWidth+0.3,bgHeight+0.1), new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.2, transparent: true }))
-        background.position.set(0,0,-0.01);
+        var background = new THREE.Mesh(new THREE.PlaneGeometry(bgWidth + 0.3, bgHeight + 0.1), new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.2, transparent: true }))
+        background.position.set(0, 0, -0.01);
         nameMesh.add(background);
         // nameMesh.renderOrder =0;
         // console.log(nameMesh);
@@ -379,10 +379,10 @@ export class Room {
         this.selfAnimationActions[0].timeScale = -1;
         this.selfAnimationActions[0].paused = false;
     }
-    clap(){
+    clap() {
         clearInterval(this.clapTimeoutID);
         this.selfAnimationActions[0].stop();
-        
+
         this.selfAnimationActions[1].reset();
         this.selfAnimationActions[1].play();
         this.selfAnimationActions[1].paused = false;
@@ -392,6 +392,50 @@ export class Room {
         this.clapTimeoutID = setTimeout(() => {
             this.selfAnimationActions[1].stop();
         }, 4000);
+    }
+
+    unmount() {
+        console.log(this.renderer);
+        console.log(this.scene);
+        this.renderer.dispose();
+        this.renderer.forceContextLoss(); 
+        this.renderer.context=undefined;
+        this.renderer.domElement=undefined;
+        this.scene.traverse((obj) => {
+            this.doDispose(obj);
+        })
+        cancelAnimationFrame(this.animationFrameID)
+    
+        console.log("after");
+        console.log(this.renderer);
+        console.log(this.scene);
+    }
+
+    doDispose (obj)
+    {
+        if (obj !== null)
+        {
+            for (var i = 0; i < obj.children.length; i++)
+            {
+                this.doDispose(obj.children[i]);
+            }
+            if (obj.geometry)
+            {
+                obj.geometry.dispose();
+                obj.geometry = undefined;
+            }
+            if (obj.material)
+            {
+                if (obj.material.map)
+                {
+                    obj.material.map.dispose();
+                    obj.material.map = undefined;
+                }
+                obj.material.dispose();
+                obj.material = undefined;
+            }
+        }
+        obj = undefined;
     }
 
 } 
