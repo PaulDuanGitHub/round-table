@@ -15,7 +15,7 @@ class RoomPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            socket: io.connect(`${url}/`, isSocket ? {path :'/round-table/socket.io'} : {}),
+            socket: io.connect(isSocket? "https://api.paulduan.tk/" : "http://127.0.0.1:8000/", isSocket ? {path :'/round-table/socket.io'} : {}),
             // socket: io.connect("http://127.0.0.1:8000/"),
             user: {
                 userName: "",
